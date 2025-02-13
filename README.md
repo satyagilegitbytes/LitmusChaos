@@ -41,7 +41,8 @@ Click on New Experiment
 Type Poddelete
 Fill the remaining configurations
 Add the http probe for the application pod.
-Download the yaml and add the annotations as below:
+Download the yaml and add the annotations as below:  
+
     annotations:
     probeRef: '[{"name":"delete","mode":"Continuous"}]'
 
