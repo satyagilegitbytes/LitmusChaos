@@ -46,7 +46,21 @@ Download the yaml and add the annotations as below:
     annotations:
     probeRef: '[{"name":"delete","mode":"Continuous"}]'
 
-Run the below command to trigger the Pod delete operation.  
+Add the below probe under experiments  
+
+    probe:
+        - name: delete
+        type: httpProbe
+        httpProbe/inputs:
+            url: http://single-app-single-collector.litmus.cluster.local
+            insecureSkipVerufy: false
+            method:
+            get:
+                criteria: "=="
+                responseCode: "200"
+        mode: Continuous
+
+After modification Run the below command to trigger the Pod delete operation.  
 
     kubectl apply -f pod_delete.yml
 
