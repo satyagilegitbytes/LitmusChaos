@@ -1,0 +1,17 @@
+                        probe:
+                          - name: delete
+                            type: httpProbe
+                            httpProbe/inputs:
+                              url: http://single-app-single-collector.litmus.cluster.local
+                              insecureSkipVerufy: false
+                              method:
+                                get:
+                                  criteria: "=="
+                                  responseCode: "200"
+                            mode: Continuous
+
+                apiVersion: litmuschaos.io/v1alpha1
+                kind: ChaosEngine
+                metadata:
+                  annotations:
+                    probeRef: '[{"name":"delete","mode":"Continuous"}]'
