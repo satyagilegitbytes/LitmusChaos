@@ -60,6 +60,6 @@ Add the below probe under experiments
 
 After modification Run the below command to trigger the Pod delete operation.  
 
-    kubectl apply -f pod_delete.yml
+    kubectl apply -f poddelete_3.yml
 
 # 6. Verify the details on Cluster and in Litmus GUI  
