@@ -3,7 +3,7 @@ Reference Documentation:
     https://docs.litmuschaos.io/docs/getting-started/installation#prerequisites
 
 
-# 1. Install mongo  
+# 1. Install LitmusChaos via Helm  
 
     helm repo add litmuschaos https://litmuschaos.github.io/litmus-helm/
     helm repo list
