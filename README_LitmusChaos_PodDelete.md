@@ -8,7 +8,7 @@ Reference Documentation:
     helm repo add litmuschaos https://litmuschaos.github.io/litmus-helm/
     helm repo list
     kubectl create ns litmus
-    helm install chaos litmuschaos/litmus --namespace=litmus --set portal.frontend.service.type=NodePort
+    helm upgrade --install chaos litmuschaos/litmus --namespace=litmus --set portal.frontend.service.type=NodePort
 
 # 2. Verify your installation  
 
