@@ -3,16 +3,14 @@ Reference Documentation:
     https://docs.litmuschaos.io/docs/getting-started/installation#prerequisites
 
 
-# 1. Install mongo
+# 1. Install mongo  
 
-    helm repo add bitnami https://charts.bitnami.com/bitnami
-    helm install my-release bitnami/mongodb --values mongo-values.yaml -n litmus --create-namespace
+    helm repo add litmuschaos https://litmuschaos.github.io/litmus-helm/
+    helm repo list
+    kubectl create ns litmus
+    helm install chaos litmuschaos/litmus --namespace=litmus --set portal.frontend.service.type=NodePort
 
-# 2. Install LitmusChaos
-
- kubectl apply -f https://raw.githubusercontent.com/litmuschaos/litmus/master/mkdocs/docs/3.12.0/litmus-getting-started.yaml 
-
-# 3. Verify your installation  
+# 2. Verify your installation  
 
     kubectl get pods -n litmus
     kubectl get svc -n litmus
@@ -22,12 +20,12 @@ Reference Documentation:
     id: admin
     pass: litmus
 
-# 4. Install the application  
+# 3. Install the application  
 
     cd python_app
     kubectl apply -f .
 
-# 5. Add the Minikube Environment in Litmus GUI  
+# 4. Add the Minikube Environment in Litmus GUI  
 
 Click on Environments
 Add New Environment
@@ -35,7 +33,7 @@ Give a name and save it
 
     kubectl apply -f nonprod-litmus-chaos-enable.yml
 
-# 6. Add the Chaos Experiments in Litmus GUI  
+# 5. Add the Chaos Experiments in Litmus GUI  
 
 Click on New Experiment
 Type Poddelete
@@ -64,4 +62,4 @@ After modification Run the below command to trigger the Pod delete operation.
 
     kubectl apply -f pod_delete.yml
 
-# 7. Verify the details on Cluster and in Litmus GUI  
+# 6. Verify the details on Cluster and in Litmus GUI  

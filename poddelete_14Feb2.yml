@@ -1,15 +1,15 @@
 kind: Workflow
 apiVersion: argoproj.io/v1alpha1
 metadata:
-  name: delete
+  name: poddelete
   namespace: litmus
   creationTimestamp: null
   labels:
-    infra_id: a8147766-22f6-4bf3-81d9-638b90a42fc7
-    revision_id: 5e8a62b7-23ee-4117-8318-de3197ddd5a5
+    infra_id: 1f73bccc-3bee-4082-b2bc-bff965bdc565
+    revision_id: 7da25bf1-4be4-47ad-ba92-3a6742ff7d3b
     subject: "test_litmus"
-    workflow_id: cd5545b2-bad7-4fef-ae62-47abb5fd3caf
-    workflows.argoproj.io/controller-instanceid: a8147766-22f6-4bf3-81d9-638b90a42fc7
+    workflow_id: d8e0ddac-f4f0-4004-a702-045197a7e64c
+    workflows.argoproj.io/controller-instanceid: 1f73bccc-3bee-4082-b2bc-bff965bdc565
 spec:
   templates:
     - name: argowf-chaos
@@ -23,8 +23,8 @@ spec:
         - - name: run-chaos
             template: run-chaos
             arguments: {}
-        - - name: pod-delete-ova
-            template: pod-delete-ova
+        - - name: pod-delete-ir7
+            template: pod-delete-ir7
             arguments: {}
         - - name: cleanup-chaos-resources
             template: cleanup-chaos-resources
@@ -78,7 +78,7 @@ spec:
                         verbs:
                           - "get"
                           - "list"
-                    image: "litmuschaos.docker.scarf.sh/litmuschaos/go-runner:3.12.0"
+                    image: "litmuschaos.docker.scarf.sh/litmuschaos/go-runner:3.15.0"
                     imagePullPolicy: Always
                     args:
                     - -c
@@ -106,8 +106,8 @@ spec:
 
                     labels:
                       name: pod-delete
-          - name: pod-delete-ova
-            path: /tmp/pod-delete-ova.yaml
+          - name: pod-delete-ir7
+            path: /tmp/pod-delete-ir7.yaml
             raw:
               data: >
                 apiVersion: litmuschaos.io/v1alpha1
@@ -123,7 +123,7 @@ spec:
                     name: pod-delete
                     app.kubernetes.io/part-of: litmus
                     app.kubernetes.io/component: chaosexperiment
-                    app.kubernetes.io/version: 3.12.0
+                    app.kubernetes.io/version: 3.15.0
                 spec:
                   definition:
                     scope: Namespaced
@@ -227,7 +227,7 @@ spec:
                           - patch
                           - update
                           - delete
-                    image: litmuschaos.docker.scarf.sh/litmuschaos/go-runner:3.12.0
+                    image: litmuschaos.docker.scarf.sh/litmuschaos/go-runner:3.15.0
                     imagePullPolicy: Always
                     args:
                       - -c
@@ -259,7 +259,7 @@ spec:
                       name: pod-delete
                       app.kubernetes.io/part-of: litmus
                       app.kubernetes.io/component: experiment-job
-                      app.kubernetes.io/version: 3.12.0
+                      app.kubernetes.io/version: 3.15.0
       outputs: {}
       metadata: {}
       container:
@@ -278,17 +278,15 @@ spec:
           - name: run-chaos
             path: /tmp/chaosengine-run-chaos.yaml
             raw:
-              data: >
+              data: |
                 apiVersion: litmuschaos.io/v1alpha1
-
                 kind: ChaosEngine
-
                 metadata:
                   namespace: "{{workflow.parameters.adminModeNamespace}}"
                   labels:
                     context: "{{workflow.parameters.appNamespace}}_kube-proxy"
                     workflow_run_id: "{{ workflow.uid }}"
-                    workflow_name: delete
+                    workflow_name: poddelete
                   annotations:
                     probeRef: '[{"name":"delete","mode":"Continuous"}]'
                   generateName: run-chaos
@@ -351,11 +349,11 @@ spec:
           - kubectl delete chaosengine -l workflow_run_id={{workflow.uid}} -n
             {{workflow.parameters.adminModeNamespace}}
         resources: {}
-    - name: pod-delete-ova
+    - name: pod-delete-ir7
       inputs:
         artifacts:
-          - name: pod-delete-ova
-            path: /tmp/chaosengine-pod-delete-ova.yaml
+          - name: pod-delete-ir7
+            path: /tmp/chaosengine-pod-delete-ir7.yaml
             raw:
               data: |
                 apiVersion: litmuschaos.io/v1alpha1
@@ -364,10 +362,10 @@ spec:
                   namespace: "{{workflow.parameters.adminModeNamespace}}"
                   labels:
                     workflow_run_id: "{{ workflow.uid }}"
-                    workflow_name: delete
+                    workflow_name: poddelete
                   annotations:
                     probeRef: '[{"name":"delete","mode":"Continuous"}]'
-                  generateName: pod-delete-ova
+                  generateName: pod-delete-ir7
                 spec:
                   appinfo:
                     appns: litmus
@@ -408,7 +406,7 @@ spec:
         name: ""
         image: docker.io/litmuschaos/litmus-checker:2.11.0
         args:
-          - -file=/tmp/chaosengine-pod-delete-ova.yaml
+          - -file=/tmp/chaosengine-pod-delete-ir7.yaml
           - -saveName=/tmp/engine-name
         resources: {}
   entrypoint: argowf-chaos

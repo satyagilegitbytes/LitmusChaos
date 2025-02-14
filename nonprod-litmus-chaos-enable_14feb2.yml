@@ -12,15 +12,15 @@ metadata:
   name: subscriber-config
   namespace: litmus
 data:
-  SERVER_ADDR: http://litmusportal-frontend-service:9091/api/query
+  SERVER_ADDR: http://chaos-litmus-frontend-service:9091/api/query
   INFRA_SCOPE: namespace
-  VERSION: 3.12.0
-  START_TIME: "1739364520255"
+  VERSION: 3.15.0
+  START_TIME: "1739519514402"
   SKIP_SSL_VERIFY: "false"
   CUSTOM_TLS_CERT: ""
   IS_INFRA_CONFIRMED: "false"
   COMPONENTS: |
-    DEPLOYMENTS: ["app=chaos-exporter", "name=chaos-operator", "app=workflow-controller", "app=event-tracker"]
+    DEPLOYMENTS: ["app=chaos-exporter", "name=chaos-operator", "app=event-tracker", "app=workflow-controller"]
 ---
 apiVersion: v1
 kind: Secret
@@ -28,8 +28,8 @@ metadata:
   name: subscriber-secret
   namespace: litmus
 stringData:
-  INFRA_ID: a8147766-22f6-4bf3-81d9-638b90a42fc7
-  ACCESS_KEY: HqXEzjkw-7U9VWIzTctr-vnfm75GVVQ2
+  INFRA_ID: 1f73bccc-3bee-4082-b2bc-bff965bdc565
+  ACCESS_KEY: J8QjqJiAGNsztndIRcFBBa4Su49cBat9
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -47,12 +47,13 @@ spec:
       labels:
         app: subscriber
     spec:
+      tolerations: []
       
       #{NODE_SELECTOR}
       serviceAccountName: litmus
       containers:
         - name: subscriber
-          image: litmuschaos/litmusportal-subscriber:3.12.0
+          image: litmuschaos.docker.scarf.sh/litmuschaos/litmusportal-subscriber:3.15.0
           imagePullPolicy: Always
           securityContext:
             runAsUser: 2000
@@ -94,11 +95,12 @@ spec:
       labels:
         app: event-tracker
     spec:
+      tolerations: []
       
       #{NODE_SELECTOR}
       serviceAccountName: litmus
       containers:
-        - image: litmuschaos/litmusportal-event-tracker:3.12.0
+        - image: litmuschaos.docker.scarf.sh/litmuschaos/litmusportal-event-tracker:3.15.0
           imagePullPolicy: Always
           securityContext:
             runAsUser: 2000
@@ -137,7 +139,7 @@ data:
       limits:
         cpu: 0.15
         memory: 512Mi
-  instanceID: a8147766-22f6-4bf3-81d9-638b90a42fc7
+  instanceID: 1f73bccc-3bee-4082-b2bc-bff965bdc565
 ---
 apiVersion: v1
 kind: Service
@@ -167,6 +169,7 @@ spec:
       labels:
         app: workflow-controller
     spec:
+      tolerations: []
       
       #{NODE_SELECTOR}
       containers:
@@ -174,13 +177,13 @@ spec:
             - --configmap
             - workflow-controller-configmap
             - --executor-image
-            -  litmuschaos/argoexec:v3.3.1
+            -  litmuschaos.docker.scarf.sh/litmuschaos/argoexec:v3.3.1
             - --namespaced
             - --container-runtime-executor
             -  k8sapi
           command:
             - workflow-controller
-          image: litmuschaos/workflow-controller:v3.3.1
+          image: litmuschaos.docker.scarf.sh/litmuschaos/workflow-controller:v3.3.1
           name: workflow-controller
           securityContext:
             runAsUser: 2000
@@ -568,11 +571,12 @@ spec:
         name: chaos-operator
     spec:
       serviceAccountName: litmus
+      tolerations: []
       
       #{NODE_SELECTOR}
       containers:
         - name: chaos-operator
-          image: litmuschaos/chaos-operator:3.12.0
+          image: litmuschaos.docker.scarf.sh/litmuschaos/chaos-operator:3.15.0
           securityContext:
             runAsUser: 2000
             allowPrivilegeEscalation: false
@@ -583,7 +587,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: CHAOS_RUNNER_IMAGE
-              value: litmuschaos/chaos-runner:3.12.0
+              value: litmuschaos.docker.scarf.sh/litmuschaos/chaos-runner:3.15.0
             - name: WATCH_NAMESPACE
               valueFrom:
                 fieldRef:
@@ -627,10 +631,11 @@ spec:
         app: chaos-exporter
         release: prometheus-stack
     spec:
+      tolerations: []
       
       #{NODE_SELECTOR}
       containers:
-        - image: litmuschaos/chaos-exporter:3.12.0
+        - image: litmuschaos.docker.scarf.sh/litmuschaos/chaos-exporter:3.15.0
           imagePullPolicy: Always
           name: chaos-exporter
           securityContext:
