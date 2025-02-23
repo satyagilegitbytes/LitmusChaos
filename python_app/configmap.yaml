@@ -10,5 +10,5 @@ data:
   OTEL_TRACES_EXPORTER: "console,otlp"
   OTEL_METRICS_EXPORTER: "console,otlp"
   OTEL_LOGS_EXPORTER: "console,otlp"
-  OTEL_EXPORTER_OTLP_ENDPOINT: "http://my-opentelemetry-collector:4317"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://alloy:4317"
   OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED: "true"
