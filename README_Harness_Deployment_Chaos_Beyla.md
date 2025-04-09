@@ -13,7 +13,7 @@ Make sure to update the node_exporter service ip in alloy configuration in confi
 
     helm  upgrade --install --namespace metrics alloy grafana/alloy -f alloy_k8s_app_monitoring.yaml
 
-# 3. Install and Configure Grafana Beyla on cluster  
+# 3. Install and Configure Grafana Beyla on cluster for Auto Instrumentation
 
     helm repo add grafana https://grafana.github.io/helm-charts
     helm upgrade --install beyla grafana/beyla -f helm-beyla.yaml
